@@ -1,2 +1,2 @@
 # skipper
-Manage your ssh connections 
+Manage your ssh connections with ease
