@@ -1,5 +1,5 @@
 build:
-    go build -o skipper
+	go build -o skipper
 
 run:
 	go run .
