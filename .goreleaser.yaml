@@ -9,3 +9,19 @@ builds:
       - amd64
       - arm64
     main: ./main.go
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+release:
+  github:
+    owner: JerryAgbesi
+    name: skipper
