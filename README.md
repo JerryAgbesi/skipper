@@ -12,23 +12,43 @@ A CLI tool for managing SSH connections with an interactive terminal UI. Skipper
 - **Fuzzy search** -- quickly narrow down hosts by typing
 - **Seamless connection** -- selects a host and drops you straight into an SSH session
 
-## Prerequisites
+## Installation
 
-- [Go](https://go.dev/) 1.25+
-- An SSH config file (typically `~/.ssh/config`)
+### Download a release binary
 
-## Getting Started
+1. Head to the [Releases](https://github.com/JerryAgbesi/skipper/releases/latest) page
+2. Download the archive for your platform (e.g. `skipper_<version>_<os>_<arch>.tar.gz`)
+3. Extract and move to your PATH:
 
 ```bash
-# Clone the repo
+tar -xzf skipper_*_<os>_<arch>.tar.gz -C /usr/local/bin/
+```
+
+4. Verify the installation:
+
+```bash
+skipper --version
+```
+
+### Build from source
+
+Prerequisites:
+- [Go](https://go.dev/) 1.25+
+
+```bash
 git clone https://github.com/JerryAgbesi/skipper.git
 cd skipper
-
-# Build and run
 make build
-./skipper
+sudo mv skipper /usr/local/bin/
+```
 
-# Or run directly
+## Development
+
+If you want to explore or contribute to the codebase:
+
+```bash
+git clone https://github.com/JerryAgbesi/skipper.git
+cd skipper
 make run
 ```
 
@@ -62,17 +82,3 @@ skipper [flags]
 | `make lint` | Run golangci-lint |
 | `make fmt` | Format code |
 | `make all` | Format + Build + Run |
-
-## Project Structure
-
-```
-skipper/
-├── main.go                  # Entry point
-├── cmd/root.go              # CLI command definition
-├── internal/
-│   ├── connect/connect.go   # SSH session execution
-│   ├── sshconfig/parser.go  # SSH config file parser
-│   └── ui/model.go          # Interactive terminal UI
-├── Makefile
-└── go.mod
-```

@@ -1,5 +1,7 @@
+VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
+
 build:
-	go build -o skipper
+	go build -ldflags "-s -w -X github.com/jerryagbesi/skipper/cmd.version=$(VERSION)" -o skipper
 
 run:
 	go run .

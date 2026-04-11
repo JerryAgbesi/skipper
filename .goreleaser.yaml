@@ -9,6 +9,8 @@ builds:
       - amd64
       - arm64
     main: ./main.go
+    ldflags:
+      - -s -w -X github.com/jerryagbesi/skipper/cmd.version={{.Version}}
 
 archives:
   - format: tar.gz

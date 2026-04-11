@@ -14,9 +14,11 @@ import (
 
 var configPath string
 
+var version = "dev"
+
 var rootCmd = &cobra.Command{
 	Use:     "skipper <command> [flags]",
-	Version: "v1.0:beta",
+	Version: version,
 	Short:   "skipper is a cli tool for managing ssh connections",
 	Example: "skipper --version",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -59,15 +61,7 @@ var rootCmd = &cobra.Command{
 
 	},
 	SilenceErrors: true,
-	Long: `skipper is a cli tool for managing ssh connections, It allows you to select your preferred ssh host alias, connect to it, and execute commands.
-
-Usage: skipper <command> [flags]
-
-Flags:
-
-	-c, --config string   path to ssh config file, defaults to ~/.ssh/config
-	-h, --help            help for skipper
-	-v, --version         print version information`,
+	Long:          `skipper is a cli tool for managing ssh connections, It allows you to select your preferred ssh host alias, connect to it, and execute commands.`,
 }
 
 func Execute() {
