@@ -46,7 +46,8 @@ case "$LATEST" in
     ;;
 esac
 
-ARCHIVE="${BIN_NAME}_${LATEST}_${OS}_${ARCH}.tar.gz"
+VERSION="${LATEST#v}"
+ARCHIVE="${BIN_NAME}_${VERSION}_${OS}_${ARCH}.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${LATEST}/${ARCHIVE}"
 
 TMP_DIR=$(mktemp -d)
