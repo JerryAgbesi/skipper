@@ -16,6 +16,14 @@ A CLI tool for managing SSH connections with an interactive terminal UI. Skipper
 - **Seamless connection** -- selects a host and drops you straight into an SSH session
 
 ## Installation
+### Quick Install
+
+Easily install Skipper using the provided install script, or download a release binary for your platform.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JerryAgbesi/skipper/main/install.sh | sh
+```
+
 
 ### Download a release binary
 
