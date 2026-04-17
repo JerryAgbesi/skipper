@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"unicode"
 )
 
 func AddHost(path string, host Host) (*Host, error) {
@@ -17,6 +18,9 @@ func AddHost(path string, host Host) (*Host, error) {
 	}
 
 	host.Alias = resolveAlias(host)
+	if err := validateHostFields(host); err != nil {
+		return nil, err
+	}
 
 	existingHosts, err := readExistingHosts(path)
 	if err != nil {
@@ -106,4 +110,33 @@ func resolveAlias(host Host) string {
 	}
 
 	return host.Hostname
+}
+
+func validateHostFields(host Host) error {
+	fields := []struct {
+		name     string
+		value    string
+		required bool
+	}{
+		{name: "alias", value: host.Alias, required: true},
+		{name: "host name", value: host.Hostname, required: true},
+		{name: "user", value: host.User, required: true},
+		{name: "identity file", value: host.IdentityFile},
+	}
+
+	for _, field := range fields {
+		if field.required && strings.TrimSpace(field.value) == "" {
+			return fmt.Errorf("%s is required", field.name)
+		}
+
+		if containsUnsafeWhitespace(field.value) {
+			return fmt.Errorf("%s cannot contain whitespace", field.name)
+		}
+	}
+
+	return nil
+}
+
+func containsUnsafeWhitespace(value string) bool {
+	return strings.ContainsFunc(value, unicode.IsSpace)
 }

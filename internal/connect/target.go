@@ -48,6 +48,9 @@ func parseHostPort(rawHost string) (string, int, error) {
 	}
 
 	if addrErr, ok := err.(*net.AddrError); ok && strings.Contains(addrErr.Err, "missing port in address") {
+		if strings.HasSuffix(rawHost, ":") {
+			return "", 0, fmt.Errorf("target must be in the format user@host[:port]")
+		}
 		return strings.Trim(rawHost, "[]"), 0, nil
 	}
 

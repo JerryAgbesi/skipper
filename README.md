@@ -63,6 +63,14 @@ cd skipper
 make run
 ```
 
+Run the test suite with:
+
+```bash
+make test
+```
+
+Unit tests live alongside the Go packages they exercise under `cmd/` and `internal/`.
+
 ## Usage
 
 ```
@@ -98,7 +106,17 @@ skipper --add bastion admin@10.0.0.5
 | Target | Description |
 |--------|-------------|
 | `make build` | Compile the `skipper` binary |
+| `make test` | Run the full Go test suite |
 | `make run` | Build and run |
 | `make lint` | Run golangci-lint |
 | `make fmt` | Format code |
 | `make all` | Format + Build + Run |
+*** Add File: /Users/rexfordmachu/Documents/africa/skipper/tests/README.md
+# Tests
+
+This folder is the central place for repository-level and integration-style tests.
+
+Unit tests remain next to the packages they exercise in `cmd/` and `internal/`.
+That layout is intentional: several current tests need access to unexported package helpers, which would break if they were moved into a single shared directory.
+
+Use this folder for tests that validate behavior across package boundaries, CLI flows, or future end-to-end scenarios.
