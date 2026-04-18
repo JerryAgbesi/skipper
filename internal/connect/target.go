@@ -1,6 +1,7 @@
 package connect
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"strconv"
@@ -47,7 +48,8 @@ func parseHostPort(rawHost string) (string, int, error) {
 		return strings.Trim(hostname, "[]"), port, nil
 	}
 
-	if addrErr, ok := err.(*net.AddrError); ok && strings.Contains(addrErr.Err, "missing port in address") {
+	var addrErr *net.AddrError
+	if errors.As(err, &addrErr) && strings.Contains(addrErr.Err, "missing port in address") {
 		if strings.HasSuffix(rawHost, ":") {
 			return "", 0, fmt.Errorf("target must be in the format user@host[:port]")
 		}

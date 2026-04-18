@@ -57,7 +57,7 @@ func AddHost(path string, host Host) (addedHost *Host, err error) {
 			if err == nil {
 				err = fmt.Errorf("failed to close config file %q: %w", path, cerr)
 			} else {
-				err = fmt.Errorf("%v; close error for %q: %w", err, path, cerr)
+				err = fmt.Errorf("%w; close error for %q: %w", err, path, cerr)
 			}
 		}
 	}()
@@ -96,14 +96,14 @@ func readExistingHosts(path string) ([]Host, error) {
 
 func formatHostEntry(host Host) string {
 	var builder strings.Builder
-	builder.WriteString(fmt.Sprintf("Host %s\n", host.Alias))
-	builder.WriteString(fmt.Sprintf("  HostName %s\n", host.Hostname))
-	builder.WriteString(fmt.Sprintf("  User %s\n", host.User))
+	fmt.Fprintf(&builder, "Host %s\n", host.Alias)
+	fmt.Fprintf(&builder, "  HostName %s\n", host.Hostname)
+	fmt.Fprintf(&builder, "  User %s\n", host.User)
 	if host.Port > 0 {
-		builder.WriteString(fmt.Sprintf("  Port %d\n", host.Port))
+		fmt.Fprintf(&builder, "  Port %d\n", host.Port)
 	}
 	if host.IdentityFile != "" {
-		builder.WriteString(fmt.Sprintf("  IdentityFile %s\n", host.IdentityFile))
+		fmt.Fprintf(&builder, "  IdentityFile %s\n", host.IdentityFile)
 	}
 
 	return builder.String()

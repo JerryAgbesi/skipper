@@ -18,11 +18,11 @@ type Host struct {
 }
 
 func DefaultConfigPath() (string, error) {
-	if home, err := os.UserHomeDir(); err != nil {
+	home, err := os.UserHomeDir()
+	if err != nil {
 		return "", fmt.Errorf("error resolving home directory: %w", err)
-	} else {
-		return filepath.Join(home, ".ssh", "config"), nil
 	}
+	return filepath.Join(home, ".ssh", "config"), nil
 }
 
 func ParseHosts(path string) ([]Host, error) {
@@ -44,7 +44,8 @@ func ParseHosts(path string) ([]Host, error) {
 	var hosts []Host
 
 	for _, host := range cfg.Hosts {
-		for _, pattern := range host.Patterns { //incase a user has multiple patterns for a host eg. Host bastion jump-box *.staging
+		// A single Host block can list multiple patterns (e.g. `Host bastion jump-box *.staging`) — iterate each.
+		for _, pattern := range host.Patterns {
 			alias := pattern.String()
 
 			if alias == "*" {
@@ -71,10 +72,8 @@ func ParseHosts(path string) ([]Host, error) {
 				Port:         port,
 				IdentityFile: identityFile,
 			})
-
 		}
 	}
 
 	return hosts, nil
-
 }

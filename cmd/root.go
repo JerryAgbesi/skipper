@@ -13,9 +13,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var configPath string
-var addAlias string
-var findQuery string
+var (
+	configPath string
+	addAlias   string
+	findQuery  string
+)
 
 var version = "dev"
 

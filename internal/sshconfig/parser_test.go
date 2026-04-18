@@ -6,7 +6,6 @@ import (
 
 func TestStandardConfigParse(t *testing.T) {
 	hosts, err := ParseHosts("../../testdata/config1")
-
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -18,7 +17,6 @@ func TestStandardConfigParse(t *testing.T) {
 
 func TestEmptyConfig(t *testing.T) {
 	hosts, err := ParseHosts("../../testdata/config")
-
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +28,6 @@ func TestEmptyConfig(t *testing.T) {
 
 func TestFileNotFound(t *testing.T) {
 	hosts, err := ParseHosts("404file")
-
 	if err == nil {
 		t.Fatalf("expected error, got nil")
 	}
