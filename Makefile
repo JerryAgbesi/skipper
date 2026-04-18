@@ -15,6 +15,10 @@ lint:
 fmt:
 	golangci-lint fmt
 
-.PHONY: all build run lint fmt
+hooks:
+	git config core.hooksPath .githooks
+	@echo "Git hooks path set to .githooks"
+
+.PHONY: all build run lint fmt hooks
 all:
 	golangci-lint fmt && go build -o skipper && go run .

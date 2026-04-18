@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+# Skipper pre-commit hook: runs the linter before allowing a commit.
+# Enable with `make hooks` (sets core.hooksPath to .githooks).
+
+set -e
+
+if ! command -v golangci-lint >/dev/null 2>&1; then
+  echo "pre-commit: golangci-lint not found on PATH — install it or skip with 'git commit --no-verify'" >&2
+  exit 1
+fi
+
+echo "pre-commit: running make lint..."
+make lint

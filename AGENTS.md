@@ -6,6 +6,7 @@ Guidance for AI coding agents contributing to Skipper. Derived from `CONTRIBUTIN
 
 - Requires Go 1.25+.
 - Build and run locally with `make run`.
+- Run `make hooks` once after cloning to enable the pre-commit lint hook (`.githooks/pre-commit`).
 
 ## Before you push
 
