@@ -79,7 +79,7 @@ skipper [flags]
 
 | Flag | Description |
 |------|-------------|
-| `-a, --add <alias> <target>` | Add a host entry to the SSH config using a target like `user@host[:port]` |
+| `-a, --add <alias> <user@host[:port]>` | Add a host entry to the SSH config under the given alias |
 | `-c, --config <path>` | Path to SSH config file (default: `~/.ssh/config`) |
 | `-f, --find [term]` | Open directly in find mode, or pre-filter hosts when a search term is provided |
 | `-v, --version` | Print version |
