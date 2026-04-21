@@ -4,12 +4,19 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to release (e.g. v0.2.0)'
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 jobs:
   tag:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       new_tag: ${{ steps.tag.outputs.new_tag }}
@@ -34,13 +41,32 @@ jobs:
 
   release:
     needs: tag
-    if: needs.tag.outputs.new_tag != ''
+    if: |
+      always() &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        (needs.tag.result == 'success' && needs.tag.outputs.new_tag != '')
+      )
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve release ref
+        id: ref
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "ref=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${{ needs.tag.outputs.new_tag }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ steps.ref.outputs.ref }}
+
+      - name: Verify dispatched tag exists
+        if: github.event_name == 'workflow_dispatch'
+        run: git rev-parse "refs/tags/${{ inputs.tag }}"
 
       - name: Set up Go
         uses: actions/setup-go@v5
