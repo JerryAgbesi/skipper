@@ -18,12 +18,28 @@ archives:
 
 changelog:
   sort: asc
+  use: github
+  groups:
+    - title: "Breaking Changes"
+      regexp: '^.*?[a-z]+(\([\w\-\.]+\))?!:.+$'
+      order: 0
+    - title: "Features"
+      regexp: '^.*?feat(\([\w\-\.]+\))?!?:.+$'
+      order: 1
+    - title: "Bug Fixes"
+      regexp: '^.*?fix(\([\w\-\.]+\))?!?:.+$'
+      order: 2
+    - title: "Other"
+      order: 999
   filters:
     exclude:
       - "^docs:"
       - "^test:"
+      - "^chore:"
 
 release:
   github:
     owner: JerryAgbesi
     name: skipper
+  header: |
+    See the full [CHANGELOG.md](https://github.com/JerryAgbesi/skipper/blob/v{{ .Version }}/CHANGELOG.md) for details and migration notes.
