@@ -74,22 +74,27 @@ Unit tests live alongside the Go packages they exercise under `cmd/` and `intern
 ## Usage
 
 ```
-skipper [flags]
+skipper [command] [flags]
 ```
 
 | Flag | Description |
 |------|-------------|
-| `-a, --add <alias> <user@host[:port]>` | Add a host entry to the SSH config under the given alias |
 | `-c, --config <path>` | Path to SSH config file (default: `~/.ssh/config`) |
 | `-f, --find [term]` | Open directly in find mode, or pre-filter hosts when a search term is provided |
 | `-v, --version` | Print version |
 | `-h, --help` | Show help |
 
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `add <alias> <user@host[:port]>` | Add a host entry to the SSH config under the given alias |
+
 Examples:
 
 ```bash
-skipper --add devone user@ipaddress:9000
-skipper --add bastion admin@10.0.0.5
+skipper add devone user@ipaddress:9000
+skipper add bastion admin@10.0.0.5
 ```
 
 ### Keyboard Controls

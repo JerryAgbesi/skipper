@@ -93,9 +93,13 @@ func TestPrepareHostSelectionReturnsErrorWhenNoMatch(t *testing.T) {
 func TestAddHostWritesAliasAndTarget(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	host, err := addHost(configPath, "devone", []string{"user@10.0.0.8:9000"})
+	host, created, err := addHost(configPath, "devone", "user@10.0.0.8:9000")
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if !created {
+		t.Fatal("expected created to be true on first add")
 	}
 
 	if host.Alias != "devone" {
@@ -119,14 +123,22 @@ func TestAddHostWritesAliasAndTarget(t *testing.T) {
 func TestAddHostIsIdempotentForSameAliasAndTarget(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	firstHost, err := addHost(configPath, "devone", []string{"user@10.0.0.8:9000"})
+	firstHost, firstCreated, err := addHost(configPath, "devone", "user@10.0.0.8:9000")
 	if err != nil {
 		t.Fatalf("expected first add to succeed, got %v", err)
 	}
 
-	secondHost, err := addHost(configPath, "devone", []string{"user@10.0.0.8:9000"})
+	if !firstCreated {
+		t.Fatal("expected first add to report created=true")
+	}
+
+	secondHost, secondCreated, err := addHost(configPath, "devone", "user@10.0.0.8:9000")
 	if err != nil {
 		t.Fatalf("expected second add to succeed, got %v", err)
+	}
+
+	if secondCreated {
+		t.Fatal("expected duplicate add to report created=false")
 	}
 
 	if secondHost.Alias != firstHost.Alias || secondHost.User != firstHost.User || secondHost.Hostname != firstHost.Hostname || secondHost.Port != firstHost.Port {
@@ -155,11 +167,11 @@ func TestAddHostIsIdempotentForSameAliasAndTarget(t *testing.T) {
 func TestAddHostRejectsDuplicateAliasWithDifferentTarget(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	if _, err := addHost(configPath, "devone", []string{"user@10.0.0.8:9000"}); err != nil {
+	if _, _, err := addHost(configPath, "devone", "user@10.0.0.8:9000"); err != nil {
 		t.Fatalf("expected first add to succeed, got %v", err)
 	}
 
-	_, err := addHost(configPath, "devone", []string{"user@10.0.0.9:9000"})
+	_, _, err := addHost(configPath, "devone", "user@10.0.0.9:9000")
 	if err == nil {
 		t.Fatal("expected duplicate alias with different target to fail")
 	}
@@ -172,25 +184,16 @@ func TestAddHostRejectsDuplicateAliasWithDifferentTarget(t *testing.T) {
 func TestAddHostRequiresAlias(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	_, err := addHost(configPath, "   ", []string{"user@10.0.0.8:9000"})
+	_, _, err := addHost(configPath, "   ", "user@10.0.0.8:9000")
 	if err == nil {
 		t.Fatal("expected error for missing alias")
-	}
-}
-
-func TestAddHostRequiresExactlyOneTarget(t *testing.T) {
-	configPath := filepath.Join(t.TempDir(), "config")
-
-	_, err := addHost(configPath, "devone", nil)
-	if err == nil {
-		t.Fatal("expected error for missing target")
 	}
 }
 
 func TestAddHostRejectsInvalidTarget(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	_, err := addHost(configPath, "devone", []string{"invalid-target"})
+	_, _, err := addHost(configPath, "devone", "invalid-target")
 	if err == nil {
 		t.Fatal("expected error for invalid target")
 	}
