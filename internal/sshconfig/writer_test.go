@@ -56,7 +56,7 @@ func TestAddHostRejectsUnsafeWhitespaceInWrittenFields(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			configPath := filepath.Join(t.TempDir(), "config")
 
-			_, err := AddHost(configPath, test.host)
+			_, _, err := AddHost(configPath, test.host)
 			if err == nil {
 				t.Fatal("expected error, got nil")
 			}
@@ -76,7 +76,7 @@ func TestAddHostRejectsUnsafeWhitespaceInWrittenFields(t *testing.T) {
 func TestAddHostRejectsUnsafeWhitespaceInResolvedAlias(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	_, err := AddHost(configPath, Host{
+	_, _, err := AddHost(configPath, Host{
 		Hostname: "example host",
 		User:     "alice",
 	})
@@ -92,7 +92,7 @@ func TestAddHostRejectsUnsafeWhitespaceInResolvedAlias(t *testing.T) {
 func TestAddHostWritesSafeIdentityFile(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	_, err := AddHost(configPath, Host{
+	_, _, err := AddHost(configPath, Host{
 		Alias:        "jump-box",
 		Hostname:     "example.com",
 		User:         "alice",
@@ -115,7 +115,7 @@ func TestAddHostWritesSafeIdentityFile(t *testing.T) {
 func TestAddHostRejectsDuplicateAliasWithDifferentIdentityFile(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config")
 
-	_, err := AddHost(configPath, Host{
+	_, _, err := AddHost(configPath, Host{
 		Alias:        "jump-box",
 		Hostname:     "example.com",
 		User:         "alice",
@@ -125,7 +125,7 @@ func TestAddHostRejectsDuplicateAliasWithDifferentIdentityFile(t *testing.T) {
 		t.Fatalf("expected first host to be added, got %v", err)
 	}
 
-	_, err = AddHost(configPath, Host{
+	_, _, err = AddHost(configPath, Host{
 		Alias:        "jump-box",
 		Hostname:     "example.com",
 		User:         "alice",

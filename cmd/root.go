@@ -15,7 +15,6 @@ import (
 
 var (
 	configPath string
-	addAlias   string
 	findQuery  string
 )
 
@@ -31,20 +30,10 @@ var rootCmd = &cobra.Command{
 	Long:          `skipper is a cli tool for managing ssh connections, It allows you to select your preferred ssh host alias, connect to it, and execute commands.`,
 }
 
-func runRoot(cmd *cobra.Command, args []string) error {
+func runRoot(cmd *cobra.Command, _ []string) error {
 	path, err := resolveConfigPath(configPath)
 	if err != nil {
 		return err
-	}
-
-	if cmd.Flags().Changed("add") {
-		host, err := addHost(path, addAlias, args)
-		if err != nil {
-			return err
-		}
-
-		fmt.Printf("added host %q for %s\n", host.Alias, hostTarget(host))
-		return nil
 	}
 
 	hosts, err := sshconfig.ParseHosts(path)
@@ -100,19 +89,15 @@ func prepareHostSelection(cmd *cobra.Command, hosts []sshconfig.Host) (ui.RunOpt
 	return options, filtered, nil
 }
 
-func addHost(path, alias string, args []string) (*sshconfig.Host, error) {
+func addHost(path, alias, target string) (*sshconfig.Host, bool, error) {
 	alias = strings.TrimSpace(alias)
 	if alias == "" {
-		return nil, fmt.Errorf("--add requires an alias")
+		return nil, false, fmt.Errorf("alias is required")
 	}
 
-	if len(args) != 1 {
-		return nil, fmt.Errorf("--add requires exactly one target in the format user@host[:port]")
-	}
-
-	host, err := connect.ParseTarget(args[0])
+	host, err := connect.ParseTarget(target)
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	host.Alias = alias
@@ -164,7 +149,6 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "path to ssh config file, defaults to ~/.ssh/config")
-	rootCmd.Flags().StringVarP(&addAlias, "add", "a", "", "add a host alias using `<alias>` user@host[:port]")
 	rootCmd.Flags().StringVarP(&findQuery, "find", "f", "", "start in find mode or pre-filter hosts by a search term")
 	rootCmd.Flags().Lookup("find").NoOptDefVal = ""
 	rootCmd.Flags().BoolP("version", "v", false, "print version information")
