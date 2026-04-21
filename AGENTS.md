@@ -26,7 +26,7 @@ go test ./...
 - Every feature must ship with tests covering it; no feature lands without test coverage.
 - Add or update tests whenever behavior changes, and keep `go test ./...` green.
 - Update `README.md` when user-facing behavior or flags change.
-- avoid using unnesessary emojis.
+- avoid using unnecessary emojis.
 
 ## Commit messages
 
