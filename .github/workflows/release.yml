@@ -42,11 +42,7 @@ jobs:
   release:
     needs: tag
     if: |
-      always() &&
-      (
-        github.event_name == 'workflow_dispatch' ||
-        (needs.tag.result == 'success' && needs.tag.outputs.new_tag != '')
-      )
+      always() && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Resolve release ref
