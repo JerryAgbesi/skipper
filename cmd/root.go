@@ -30,7 +30,7 @@ var rootCmd = &cobra.Command{
 	Long:          `skipper is a cli tool for managing ssh connections, It allows you to select your preferred ssh host alias, connect to it, and execute commands.`,
 }
 
-func runRoot(cmd *cobra.Command, args []string) error {
+func runRoot(cmd *cobra.Command, _ []string) error {
 	path, err := resolveConfigPath(configPath)
 	if err != nil {
 		return err

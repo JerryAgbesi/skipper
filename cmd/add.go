@@ -16,7 +16,7 @@ var addCmd = &cobra.Command{
 	RunE: runAdd,
 }
 
-func runAdd(cmd *cobra.Command, args []string) error {
+func runAdd(_ *cobra.Command, args []string) error {
 	path, err := resolveConfigPath(configPath)
 	if err != nil {
 		return err
