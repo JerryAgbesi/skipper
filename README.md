@@ -88,11 +88,13 @@ skipper [command] [flags]
 
 | Command | Description |
 |---------|-------------|
-| `add <alias> <user@host[:port]>` | Add a host entry to the SSH config under the given alias |
+| `add` | Launch an interactive form (alias, user, host name, port) to add a host entry |
+| `add <alias> <user@host[:port]>` | Non-interactively add a host entry to the SSH config under the given alias |
 
 Examples:
 
 ```bash
+skipper add
 skipper add devone user@ipaddress:9000
 skipper add bastion admin@10.0.0.5
 ```
